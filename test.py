@@ -5,7 +5,7 @@ import jieba.analyse
 f=open("sentence.txt",encoding = 'utf8')
 jieba.set_dictionary('dict.txt.big')
 #jieba.analyse.set_idf_path(file_name)
-w=open("output.txt",'a')
+w=open("output.txt",'w')
 
 stopWords=[]
 segments=[]
@@ -35,7 +35,7 @@ for line in f:
         print('importance word', i, ': ' + k)
         w.write('importance word')
         w.write(str(i))
-        w.write(' :'+k)
+        w.write(' : '+k)
         w.write('\n')
         i=i+1
     w.write('\n')

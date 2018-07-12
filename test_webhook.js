@@ -1,4 +1,4 @@
-'use strict'
+﻿'use strict'
 const line = require('./index');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -18,9 +18,10 @@ app.use(bodyParser.json({
 
 // init with auth
 line.init({
-  accessToken: 'KeHUWcvtD50A++1NNj11dtxIoU90nVMFMevYQsJ8ZU3aIUL9EgQVwxBkMPDLFm+GofUCf+Ucf5EBu162Z1RXwTDSDyX6V/V+/iyoRxA52MDoituSh1ExJl7P1ZuvOgmEXYtaCWmepJPhwphas3JeQwdB04t89/1O/w1cDnyilFU=',
+  accessToken: 'Qk8s+BR4UeYTRNIX2OdgZ1m4qQhYdrjOjv8vVia42UmAfFo9YHYuDxZagKSXSYbIofUCf+Ucf5EBu162Z1RXwTDSDyX6V/V+/iyoRxA52MBW7SX9x3vOR85aDn00FQdDG/DKWvEppTg7goebo9OK1AdB04t89/1O/w1cDnyilFU=',
   // (Optional) for webhook signature validation
-  channelSecret: '9a60b3910f4dfece5a7bf11d8aac9dd2'
+  channelSecret: 'ce3baeb0796259a1ca795fd2330d683b'
+
 })
 
 /**
@@ -48,8 +49,8 @@ var i=0;
 
 app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
   // get content from request body
-  i++;
-  const promises = req.body.events.map(event => {
+	i++;
+	const promises = req.body.events.map(event => {
     // reply message
 	//var pyshell = new PythonShell('test.py');
 	var fs=require('fs');
@@ -57,26 +58,27 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 		if(err) {
 			return console.log(err);
 		}
-		i++;
-		console.log("Response "+i+" has been saved.");
+		console.log("LOG : Response "+i+" has been saved.");
 	}); 
 	PythonShell.run('test.py', function (err) {
 		if (err) throw err;
-		console.log('Get response '+i+' important word.');
+		console.log('LOG : Get response '+i+' important word.');
+		console.log('LOG : Check \'output.txt\' file to get more information.')
+		console.log('------------------------');
 	});
 	var wf=require('fs');
 	
 	//pyshell.send(event.message.text);
-	//yshell.on('message', function (msg) {
+	//pyshell.on('text', function (msg) {
 	//	// received a message sent from the Python script (a simple "print" statement)
+	//	var buf=iconv.encode(msg,'utf8');
+	//	var out=iconv.decode(msg,'big5');
 	//	
-	//	var out=iconv.decode(msg,'utf8');
-	//	var buf=iconv.encode(msg,'big5');
-	//	console.log('user response '+ i +' :'+ buf);	//multiuser???
+	//	console.log('user response '+ i +' :'+ msg);	//multiuser???
 	//	//console.log(msg.length + '= =');
 	//	
-	//);
-	//yshell.end(function (err,code,signal) {
+	//});
+	//pyshell.end(function (err,code,signal) {
 	//	//if (err) throw err;
 	//	//console.log('The exit code was: ' + code);
 	//	//console.log('The exit signal was: ' + signal);
@@ -84,22 +86,33 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 	//	//console.log('finished');
 	//	console.log('------------------------');
 	//);
+	//var outdata;
+	//var rf=require('fs');
+	//rf.readFile('output.txt','utf8',function(err,data){
+	//	if(err){
+	//		return console.log(err);
+	//	}
+	//	var outdata=new String(data);
+	//	outdata=iconv.encode(outdata,'utf8');
+	//	outdata=iconv.decode(outdata,'big5');
+	//	console.log(outdata);
+	//});
     return line.client
       .replyMessage({
         replyToken: event.replyToken,
         messages: [
           {
             type: 'text',
-            text: event.message.text
+            text: event.message.text + ' 嘻嘻'
           }
         ]
       })
-  })
-  Promise
-    .all(promises)
-    .then(() => res.json({success: true}))
+	});
+	Promise
+		.all(promises)
+		.then(() => res.json({success: true}))
 })
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log('Example app listening on port 3000!')
+  console.log('Listening on port 3000!');
 })
