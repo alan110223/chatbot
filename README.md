@@ -1,4 +1,4 @@
-<p>要能跑程式需要用到node.js、ngrok、python還有line的一個官方帳號</p>
+<p>要能跑程式需要用到node.js、ngrok、python還有line的一個官方帳號(能使用message api)</p>
 
 <br>使用步驟:</br>
   <br>1.下載整個檔案</br>
