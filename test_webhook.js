@@ -18,9 +18,9 @@ app.use(bodyParser.json({
 
 // init with auth
 line.init({
-  accessToken: 'UU0hFJWAtUnKftHii/ed3MaJXfGDstfUnAsdcatOmq48+uF9vrXgoahxtH3jeSZZofUCf+Ucf5EBu162Z1RXwTDSDyX6V/V+/iyoRxA52MBn3ZDaT6d4v6b2inJ8XPXvn58CYTewDXoG2dAXoDNQIAdB04t89/1O/w1cDnyilFU=',
+  accessToken: '',
   // (Optional) for webhook signature validation
-  channelSecret: 'fe5c35bf47459cdbcda82bd50270fcf3'
+  channelSecret: ''
 
 })
 
