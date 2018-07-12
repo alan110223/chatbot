@@ -1,11 +1,13 @@
 'use strict'
-const line = require('./index')
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
+const line = require('./index');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const utf8 = require('utf8');
 
 var PythonShell = require('python-shell');
-var pyshell = new PythonShell('test.py');
+//var pyshell = new PythonShell('test.py');
+var iconv = require('iconv-lite');
 
 // need raw buffer for signature validation
 app.use(bodyParser.json({
@@ -43,24 +45,45 @@ line.init({
  * }
  */
 var i=0;
+
 app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
   // get content from request body
   i++;
   const promises = req.body.events.map(event => {
     // reply message
-	var pyshell = new PythonShell('test.py');
-	pyshell.send(event.message.text);
-	pyshell.on('message', function (msg) {
-		// received a message sent from the Python script (a simple "print" statement)
-		console.log('user response '+ i +' :'+ msg);
-	});
-	pyshell.end(function (err,code,signal) {
+	//var pyshell = new PythonShell('test.py');
+	var fs=require('fs');
+	fs.writeFile('sentence.txt', event.message.text, function(err) {
+		if(err) {
+			return console.log(err);
+		}
+		i++;
+		console.log("Response "+i+" has been saved.");
+	}); 
+	PythonShell.run('test.py', function (err) {
 		if (err) throw err;
-		//console.log('The exit code was: ' + code);
-		//console.log('The exit signal was: ' + signal);
-		//console.log('finished');
-		//console.log('finished');
+		console.log('Get response '+i+' important word.');
 	});
+	var wf=require('fs');
+	
+	//pyshell.send(event.message.text);
+	//yshell.on('message', function (msg) {
+	//	// received a message sent from the Python script (a simple "print" statement)
+	//	
+	//	var out=iconv.decode(msg,'utf8');
+	//	var buf=iconv.encode(msg,'big5');
+	//	console.log('user response '+ i +' :'+ buf);	//multiuser???
+	//	//console.log(msg.length + '= =');
+	//	
+	//);
+	//yshell.end(function (err,code,signal) {
+	//	//if (err) throw err;
+	//	//console.log('The exit code was: ' + code);
+	//	//console.log('The exit signal was: ' + signal);
+	//	//console.log('finished');
+	//	//console.log('finished');
+	//	console.log('------------------------');
+	//);
     return line.client
       .replyMessage({
         replyToken: event.replyToken,

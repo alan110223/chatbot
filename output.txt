@@ -1,0 +1,12 @@
+
+receive sentence :你好 我是誰
+importance word1 :你好
+
+receive sentence :123 LUL
+importance word1 :123
+importance word2 :LUL
+
+receive sentence :777 LUL
+importance word1 :777
+importance word2 :LUL
+
