@@ -11,9 +11,9 @@ var iconv = require('iconv-lite');
 
 // need raw buffer for signature validation
 app.use(bodyParser.json({
-  verify (req, res, buf) {
-    req.rawBody = buf
-  }
+	verify (req, res, buf) {
+		req.rawBody = buf
+	}
 }))
 
 // init with auth
@@ -51,7 +51,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 	i++;
 	const promises = req.body.events.map(event => {
 		console.log('LOG : Get user user id : ' + event.source.userId);
-		console.log('LOG : Get message '+i);
+		console.log('LOG : Get message '+i+' type : '+event.message.type);
 		switch(event.message.type){
 			case 'text':
 				var fs=require('fs');
@@ -67,8 +67,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 					console.log('LOG : Check \'output.txt\' file to get more information.');
 					console.log('------------------------');
 				});
-				
-				
+								
 				return line.client
 				.replyMessage({
 					replyToken: event.replyToken,
@@ -110,17 +109,34 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 				}
 				break;
 			case 'video':
-				
+				console.log("LOG : Response "+i+" is video,which will not be saved.");
 				
 				console.log('------------------------');
 				break;
 			case 'audio':
-				
+				console.log("LOG : Response "+i+" is audio,which will not be saved.");
+				console.log('------------------------');
+				return line.client
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: "image",
+							originalContentUrl: "https://img.ltn.com.tw/Upload/3c/page/2017/04/29/170429-29989-1.jpg",
+							previewImageUrl: "https://img.ltn.com.tw/Upload/3c/page/2017/04/29/170429-29989-1.jpg"
+						},
+						{
+							type: "text",
+							text: "用打字的不要偷懶好嗎"
+						}
+						]
+					})
 				
 				console.log('------------------------');
 				break;
 			case 'location':
-				console.log('LOG : User\'s current address is '+event.message.address+',which will not be saved.');
+				console.log("LOG : Response "+i+" is location,which will not be saved.");
+				console.log('LOG : Get user\'s current address : '+event.message.address);
 				
 				console.log('------------------------');
 				return line.client
@@ -140,22 +156,28 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 				console.log('------------------------');
 				break;
 			case 'image':
-				console.log('LOG : Get an image and it\'s id : '+event.message.id+',which will not be saved.');
-				
+				console.log("LOG : Response "+i+" is image,which will not be saved.");
+				console.log('LOG : Get an image and it\'s id : '+event.message.id);
+				console.log('LOG : Auto reply an image.');
 				console.log('------------------------');
 				return line.client
-					
 					.replyMessage({
 						replyToken: event.replyToken,
 						messages: [
 						{
-							type: 'text',
-							text: '傳文字好嗎'
+							type: "image",
+							originalContentUrl: "https://adeshpande3.github.io/assets/AlexNet.png",
+							previewImageUrl: "https://adeshpande3.github.io/assets/AlexNet.png"
+						},
+						{
+							type: "text",
+							text: "我看不懂，所以只好傳AlexNet的架構圖"
 						}
 						]
 					})
 				break;
 			default :
+				console.log('------------------------');
 				return line.client
 					.replyMessage({
 						replyToken: event.replyToken,

@@ -1,5 +1,3 @@
-receive sentence :123 456 789
-importance word 1 : 123
-importance word 2 : 456
-importance word 3 : 789
+receive sentence :你好 ㄎㄎ
+importance word 1 : 你好
 
