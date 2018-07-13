@@ -2,6 +2,7 @@ import sys
 import json
 import jieba
 import jieba.analyse
+
 f=open("sentence.txt",encoding = 'utf8')
 jieba.set_dictionary('dict.txt.big')
 #jieba.analyse.set_idf_path(file_name)
@@ -18,8 +19,14 @@ with open('stopwords.txt', 'r', encoding='utf8') as file:
 
 
 for line in f:
-    print('receive sentence :'+line)
-    w.write('receive sentence :'+line+'\n')
+    a=''
+    for x in line:
+        if len(x.encode('utf-8')) == 4 and x.encode('utf-8')[0] == 244:
+            x=''
+        print(x)
+        a=a+x
+    print(a)
+    w.write('receive sentence :'+a+'\n')
     tags = jieba.analyse.extract_tags(line, 15)
     # words = jieba.cut(line, cut_all=True)
     # for word in words:
@@ -33,7 +40,7 @@ for line in f:
     i=1
     for k in remainderWords:
         print('importance word', i, ': ' + k)
-        w.write('importance word')
+        w.write('importance word ')
         w.write(str(i))
         w.write(' : '+k)
         w.write('\n')

@@ -48,65 +48,128 @@ line.init({
 var i=0;
 
 app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
-  // get content from request body
 	i++;
 	const promises = req.body.events.map(event => {
-    // reply message
-	//var pyshell = new PythonShell('test.py');
-	var fs=require('fs');
-	fs.writeFile('sentence.txt', event.message.text, function(err) {
-		if(err) {
-			return console.log(err);
+		console.log('LOG : Get user user id : ' + event.source.userId);
+		console.log('LOG : Get message '+i);
+		switch(event.message.type){
+			case 'text':
+				var fs=require('fs');
+				fs.writeFile('sentence.txt', event.message.text, function(err) {
+					if(err) {
+						return console.log(err);
+					}
+					console.log("LOG : Response "+i+" has been saved.");
+				}); 
+				PythonShell.run('test.py', function (err) {
+					if (err) throw err;
+					console.log('LOG : Get response '+i+' important word.');
+					console.log('LOG : Check \'output.txt\' file to get more information.');
+					console.log('------------------------');
+				});
+				
+				
+				return line.client
+				.replyMessage({
+					replyToken: event.replyToken,
+					messages: [
+					{
+						type: 'text',
+						text: event.message.text + ' 嘻嘻'
+					}
+					]
+				})
+				break;
+			case 'sticker':
+				console.log("LOG : Response "+i+" is sticker,which will not be saved.");
+				
+				console.log('------------------------');
+				if(event.message.packageId>=2000000){
+					return line.client
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: 'text',
+							text: '不要回那個= ='
+						}
+						]
+					})
+				}else{
+					return line.client
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: 'sticker',
+							stickerId: event.message.stickerId,
+							packageId: event.message.packageId
+						}
+						]
+					})
+				}
+				break;
+			case 'video':
+				
+				
+				console.log('------------------------');
+				break;
+			case 'audio':
+				
+				
+				console.log('------------------------');
+				break;
+			case 'location':
+				console.log('LOG : User\'s current address is '+event.message.address+',which will not be saved.');
+				
+				console.log('------------------------');
+				return line.client
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: 'text',
+							text: event.message.address
+						}
+						]
+					})
+				break;
+			case 'imagemap':
+				
+				
+				console.log('------------------------');
+				break;
+			case 'image':
+				console.log('LOG : Get an image and it\'s id : '+event.message.id+',which will not be saved.');
+				
+				console.log('------------------------');
+				return line.client
+					
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: 'text',
+							text: '傳文字好嗎'
+						}
+						]
+					})
+				break;
+			default :
+				return line.client
+					.replyMessage({
+						replyToken: event.replyToken,
+						messages: [
+						{
+							type: 'text',
+							text: '不要玩他...'
+						}
+						]
+					})
+				break;
+			
 		}
-		console.log("LOG : Response "+i+" has been saved.");
-	}); 
-	PythonShell.run('test.py', function (err) {
-		if (err) throw err;
-		console.log('LOG : Get response '+i+' important word.');
-		console.log('LOG : Check \'output.txt\' file to get more information.')
-		console.log('------------------------');
-	});
-	var wf=require('fs');
-	
-	//pyshell.send(event.message.text);
-	//pyshell.on('text', function (msg) {
-	//	// received a message sent from the Python script (a simple "print" statement)
-	//	var buf=iconv.encode(msg,'utf8');
-	//	var out=iconv.decode(msg,'big5');
-	//	
-	//	console.log('user response '+ i +' :'+ msg);	//multiuser???
-	//	//console.log(msg.length + '= =');
-	//	
-	//});
-	//pyshell.end(function (err,code,signal) {
-	//	//if (err) throw err;
-	//	//console.log('The exit code was: ' + code);
-	//	//console.log('The exit signal was: ' + signal);
-	//	//console.log('finished');
-	//	//console.log('finished');
-	//	console.log('------------------------');
-	//);
-	//var outdata;
-	//var rf=require('fs');
-	//rf.readFile('output.txt','utf8',function(err,data){
-	//	if(err){
-	//		return console.log(err);
-	//	}
-	//	var outdata=new String(data);
-	//	outdata=iconv.encode(outdata,'utf8');
-	//	outdata=iconv.decode(outdata,'big5');
-	//	console.log(outdata);
-	//});
-    return line.client
-      .replyMessage({
-        replyToken: event.replyToken,
-        messages: [
-          {
-            type: 'text',
-            text: event.message.text + ' 嘻嘻'
-          }
-        ]
-      })
+		
 	});
 	Promise
 		.all(promises)
