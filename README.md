@@ -12,6 +12,9 @@ chatbot
 	6.開啟line，找到你的官方帳號，開始對話，他會回傳一樣的東西(聲音與圖片暫時沒有)
 	7.output.txt會有接收到和官方帳號對話的的文字資料(目前可收到文字、聲音、圖片、地址、貼圖的訊息做回應)
 
+目前手機與電腦(windows)版本仍然會有差異
+ -> https://imgur.com/mfVxwx9.jpg
+	
 資料來源
 ------
 	1.Node LINE Bot API : https://github.com/tejitak/node-line-bot-api 這份程式碼架構主要是參考他的範例 

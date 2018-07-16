@@ -1,3 +1,2 @@
-receive sentence :你好 ㄎㄎ
-importance word 1 : 你好
+receive sentence :1
 

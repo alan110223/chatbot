@@ -20,7 +20,7 @@ app.use(bodyParser.json({
 line.init({
   accessToken: '',
   // (Optional) for webhook signature validation
-  channelSecret: ''
+  channelSecret: '
 
 })
 
@@ -74,7 +74,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 					messages: [
 					{
 						type: 'text',
-						text: event.message.text + ' 嘻嘻'
+						text: event.message.text 
 					}
 					]
 				})
@@ -83,7 +83,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 				console.log("LOG : Response "+i+" is sticker,which will not be saved.");
 				
 				console.log('------------------------');
-				if(event.message.packageId>=2000000){
+				if(event.message.packageId>=2000000||event.message.stickerId>=50000000){
 					return line.client
 					.replyMessage({
 						replyToken: event.replyToken,
@@ -91,6 +91,39 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 						{
 							type: 'text',
 							text: '不要回那個= ='
+						},
+						{
+							type: "flex",
+							altText: "this is a flex message",
+							contents: {
+								type: "bubble",
+								direction: "rtl",
+								hero: {
+									type: "image",
+									url: "https://imgur.com/CJ0hIQ1.jpg#",
+								},
+								body: {
+									type: "box",
+									layout: "vertical",
+									contents: 
+									[
+									{
+										type: "text",
+										text: "這是用小畫家畫的圖"
+									}
+									]
+								},
+								styles: {
+									body: {
+										backgroundColor: "#00ff0f"
+									},
+									hero: {
+										separator: true,
+										separatorColor: "#0F0000"
+									}
+								}
+							}
+							
 						}
 						]
 					})
@@ -119,7 +152,60 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 				return line.client
 					.replyMessage({
 						replyToken: event.replyToken,
-						messages: [
+						messages:[
+						{
+							type: "imagemap",
+							baseUrl: "https://i.imgur.com/1JTYNdN.jpg#",
+							altText: "This is an imagemap",
+							baseSize: {
+								height: 1000,
+								width: 1000
+							},
+							actions: [
+								{
+									type: "uri",
+									linkUri: "https://www.facebook.com",
+									area: {
+										x: 0,
+										y: 0,
+										width: 500,
+										height: 500
+									}
+								},
+								{
+									type: "message",
+									text: "hi~~~",
+									area: {
+										x: 0,
+										y: 500,
+										width: 500,
+										height: 500
+									}
+								},
+								{
+									type: "uri",
+									linkUri: "https://www.google.com",
+									area: {
+										x: 500,
+										y: 500,
+										width: 500,
+										height: 500
+									}
+								},
+								{
+									type: "message",
+									text: "你好",
+									area: {
+										x: 500,
+										y: 0,
+										width: 500,
+										height: 500
+									}
+								}
+							]
+						}
+						]
+						/*messages: [
 						{
 							type: "image",
 							originalContentUrl: "https://img.ltn.com.tw/Upload/3c/page/2017/04/29/170429-29989-1.jpg",
@@ -127,9 +213,9 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 						},
 						{
 							type: "text",
-							text: "用打字的不要偷懶好嗎"
+							text: "收到聲音訊息"
 						}
-						]
+						]*/
 					})
 				
 				console.log('------------------------');
@@ -145,19 +231,14 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 						messages: [
 						{
 							type: 'text',
-							text: event.message.address
+							text: "https://www.google.com.tw/search?q="+event.message.address
 						}
 						]
 					})
 				break;
-			case 'imagemap':
-				
-				
-				console.log('------------------------');
-				break;
 			case 'image':
 				console.log("LOG : Response "+i+" is image,which will not be saved.");
-				console.log('LOG : Get an image and it\'s id : '+event.message.id);
+				console.log('LOG : Get an image and its id : '+event.message.id);
 				console.log('LOG : Auto reply an image.');
 				console.log('------------------------');
 				return line.client
@@ -171,7 +252,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 						},
 						{
 							type: "text",
-							text: "我看不懂，所以只好傳AlexNet的架構圖"
+							text: "收到圖片"
 						}
 						]
 					})
