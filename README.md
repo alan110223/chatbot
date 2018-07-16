@@ -13,7 +13,7 @@ chatbot
 	7.output.txt會有接收到和官方帳號對話的的文字資料(目前可收到文字、聲音、圖片、地址、貼圖的訊息做回應)
 
 目前手機與電腦(windows)版本仍然會有差異
- -> https://imgur.com/mfVxwx9.jpg
+ ->  ![](https://imgur.com/mfVxwx9.jpg "差異")
 	
 資料來源
 ------
