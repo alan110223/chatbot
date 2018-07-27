@@ -1,2 +1,2 @@
-receive sentence :1
-
+receive sentence :你好嘻嘻ㄎㄎLOL~~~
+word segment : 你好, 嘻嘻, ㄎ, LOL, ~, ~, 

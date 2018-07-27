@@ -4,23 +4,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const utf8 = require('utf8');
-
+var urlencodedParser = bodyParser.urlencoded({ extended: false }); 
 var PythonShell = require('python-shell');
 //var pyshell = new PythonShell('test.py');
 var iconv = require('iconv-lite');
-
+var fs=require('fs');
 // need raw buffer for signature validation
 app.use(bodyParser.json({
 	verify (req, res, buf) {
 		req.rawBody = buf
 	}
 }))
-
+app.use(express.static('src'));
 // init with auth
 line.init({
-  accessToken: '',
+  accessToken: 'k3f/nnuQ7YdvIpyCoLv5MB48d1z+aqvkmwrvQ36X/Ca6UYRNeXAHMUezvNaf+/drofUCf+Ucf5EBu162Z1RXwTDSDyX6V/V+/iyoRxA52MCbcZHj4uSY4I4mi0n5g3136OvS6wFodDi/dltsc7c/IAdB04t89/1O/w1cDnyilFU=',
   // (Optional) for webhook signature validation
-  channelSecret: '
+  channelSecret: '117c5552066adef3868951fb60021d12'
 
 })
 
@@ -45,8 +45,68 @@ line.init({
  *   ]
  * }
  */
-var i=0;
 
+
+app.post('/sendcomment.html',urlencodedParser, function(req, res) {
+ 	var name=req.body.name;
+	var email=req.body.email;
+	var comment=req.body.comment;
+	var msg;
+	console.log('name : ' + req.body.name);
+    console.log('email : ' + req.body.email);
+    console.log('comment : ' + req.body.comment);
+	
+	fs.writeFile('sentence.txt', comment, function(err) {
+		if(err) {
+			return console.log(err);
+		}
+		console.log("LOG : Response has been saved.");
+	}); 
+	var options = {
+		pythonOptions: ['-u']
+	};
+	PythonShell.run('test.py',options, function (err) {
+		if (err) throw err;
+		console.log('LOG : Get response important word.');
+		console.log('LOG : Check \'output.txt\' file to get more information.');
+		console.log('------------------------');
+	});
+	function SyncFunction(){
+		var ret;
+		setTimeout(function(){
+			fs.readFile('output.txt',(err,data)=> {
+				if(err) {
+					return console.log(err);
+				}
+				msg=iconv.decode(data, 'big5')
+				//console.log("data : "+ data);
+				console.log("LOG : Response has been read.");
+			});
+			ret = "hello";
+		},2500);
+		while(ret === undefined) {
+			require('deasync').sleep(100);
+		}
+		
+		// returns hello with sleep; undefined without
+		return msg;    
+	}
+	msg=SyncFunction().toString();
+	console.log(msg);
+	var array = msg.split('\r\n');
+	function Getwords(){
+		var j,retword='';
+		for(j=0;j<array.length;j++){
+			retword=retword+'<p>'+array[j]+'</p>'
+		}
+		return retword;
+	}
+	res.send(Getwords());
+	
+	//res.sendFile( __dirname + "/src/" + "sendcomment.html" );
+});
+
+var i=0;
 app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 	i++;
 	const promises = req.body.events.map(event => {
@@ -54,7 +114,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 		console.log('LOG : Get message '+i+' type : '+event.message.type);
 		switch(event.message.type){
 			case 'text':
-				var fs=require('fs');
+				
 				fs.writeFile('sentence.txt', event.message.text, function(err) {
 					if(err) {
 						return console.log(err);
@@ -270,9 +330,7 @@ app.post('/webhook/', line.validator.validateSignature(), (req, res, next) => {
 						]
 					})
 				break;
-			
-		}
-		
+		}	
 	});
 	Promise
 		.all(promises)

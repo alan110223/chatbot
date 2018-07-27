@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/tejitak/node-line-bot-api#readme",
   "dependencies": {
+    "deasync": "^0.1.13",
+    "http": "0.0.0",
     "iconv-lite": "^0.4.23",
     "messaging-api-line": "^0.7.4",
     "node-gyp": "^3.7.0",
@@ -25,7 +27,7 @@
     "utf8": "^3.0.0"
   },
   "devDependencies": {
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.18.3",
     "express": "^4.14.0"
   }
 }
