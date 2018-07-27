@@ -18,9 +18,9 @@ app.use(bodyParser.json({
 app.use(express.static('src'));
 // init with auth
 line.init({
-  accessToken: 'k3f/nnuQ7YdvIpyCoLv5MB48d1z+aqvkmwrvQ36X/Ca6UYRNeXAHMUezvNaf+/drofUCf+Ucf5EBu162Z1RXwTDSDyX6V/V+/iyoRxA52MCbcZHj4uSY4I4mi0n5g3136OvS6wFodDi/dltsc7c/IAdB04t89/1O/w1cDnyilFU=',
+  accessToken: '',
   // (Optional) for webhook signature validation
-  channelSecret: '117c5552066adef3868951fb60021d12'
+  channelSecret: ''
 
 })
 

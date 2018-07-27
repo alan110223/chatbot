@@ -1,2 +1,2 @@
-receive sentence :你好嘻嘻ㄎㄎLOL~~~
-word segment : 你好, 嘻嘻, ㄎ, LOL, ~, ~, 
+receive sentence :打中文或英文按下方按鈕就可以顯示斷詞結果喔~
+word segment : 中文, 英文, 下方, 按鈕, 顯示, 斷詞, 喔, ~, 
